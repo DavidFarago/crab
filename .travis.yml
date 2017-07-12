@@ -1,5 +1,15 @@
 language: cpp
 cache: apt
+
+addons:
+  sonarcloud:
+    organization: "davidfarago-github"
+    token:
+      secure: "32280fe5a7750e97e80b15b5ef4406c6a4ee035c"
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
+    
 env:
   matrix:
    # =======================================================
@@ -43,6 +53,8 @@ script:
   - /usr/bin/cmake --build . --target ldd && cmake ..
   - /usr/bin/cmake --build . --target apron && cmake ..	
   - /usr/bin/cmake --build . --target install
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - sonar-scanner
   - env CTEST_OUTPUT_ON_FAILURE=1 /usr/bin/cmake --build . --target test
 
 notifications:
