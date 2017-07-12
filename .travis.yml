@@ -48,6 +48,6 @@ script:
 notifications:
   email:
     recipients:
-     - navasjorgea@gmail.com
+     - dball9@gmail.com
     on_success: always
     on_failure: always
