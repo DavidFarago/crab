@@ -35,7 +35,8 @@ before_install:
 install:
   - sudo apt-get install --yes libgmp-dev
   - sudo apt-get install --yes libmpfr-dev   
-  - sudo apt-get install --yes openjdk-7-jre 
+  - echo $JAVA_HOME
+  - sudo apt-get install --yes openjdk-8-jre 
   - echo $JAVA_HOME
   - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
   - echo $JAVA_HOME
