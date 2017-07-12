@@ -36,11 +36,14 @@ install:
   - sudo apt-get install --yes libgmp-dev
   - sudo apt-get install --yes libmpfr-dev   
   - echo $JAVA_HOME
-  - sudo add-apt-repository --yes ppa:openjdk-r/ppa
-  - sudo apt-get update --yes
-  - sudo apt-get install --yes openjdk-8-jre 
+  #- sudo add-apt-repository --yes ppa:openjdk-r/ppa
+  #- sudo apt-get update --yes
+  #- sudo apt-get install --yes openjdk-8-jre 
+  - sudo apt-get install oracle-java8-set-default
   - echo $JAVA_HOME
-  - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+  #- export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+  - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+  - export JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
   - echo $JAVA_HOME
   - wget --no-verbose --output-document=boost-trunk.tar.bz2 http://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.bz2/download
   - export BOOST_ROOT="$TRAVIS_BUILD_DIR/../boost-trunk"
