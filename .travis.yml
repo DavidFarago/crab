@@ -31,6 +31,10 @@ before_install:
    - until sudo apt-get -qq update; do echo retry; done
    - until sudo apt-get -qq install libstdc++5; do echo retry; done
    - if [[ $CMAKE_CXX_COMPILER == g++-5 ]]; then until sudo apt-get -qq install g++-5; do echo retry; done fi
+   
+   # Add a key so we can login to travisci vm:
+   - cat ssh/travisci.pub >> ~/.ssh/authorized_keys
+   - chmod 600 ssh/travisci
 
 install:
   - sudo apt-get install --yes libgmp-dev
@@ -53,6 +57,15 @@ install:
   - (cd $BOOST_ROOT; ./bootstrap.sh --with-libraries=system,program_options)
   - (cd $BOOST_ROOT; ./b2 --prefix=$BOOST_ROOT -d0 install)
   - cd ..
+
+  # Enable remote SSH
+  # Forward ssh to a non privileged port (to avoid sharing of non privileged ports)
+  - netcat -L localhost:22 -p 2222 &
+  - sleep 5
+  # Check for open ports
+  - netstat -an|grep -i listen
+  # Create reverse SSH tunnel
+  - ssh -fn -v -N -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ssh/travisci -R 2222:localhost:2222 farago@@i11pc54.ira.uka.de
 
 script:
   - cd crab
