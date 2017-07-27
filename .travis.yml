@@ -74,8 +74,8 @@ script:
   - /usr/bin/cmake --build . --target apron && cmake ..	
   - /usr/bin/cmake --build . --target install
   - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
-  - sonar-scanner
   - env CTEST_OUTPUT_ON_FAILURE=1 /usr/bin/cmake --build . --target test
+  - sonar-scanner
 
 notifications:
   email:
