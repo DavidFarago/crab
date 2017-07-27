@@ -31,24 +31,30 @@ before_install:
    - until sudo apt-get -qq update; do echo retry; done
    - until sudo apt-get -qq install libstdc++5; do echo retry; done
    - if [[ $CMAKE_CXX_COMPILER == g++-5 ]]; then until sudo apt-get -qq install g++-5; do echo retry; done fi
-   
-   # Add a key so we can login to travisci vm:
-   - cat ssh/travisci.pub >> ~/.ssh/authorized_keys
-   - chmod 600 ssh/travisci
 
 install:
   - sudo apt-get install --yes libgmp-dev
   - sudo apt-get install --yes libmpfr-dev   
+  
+  # debugging:
   - echo $JAVA_HOME
+
+  - sudo apt-get install oracle-java8-set-default
+  # alternative: openJDK
   #- sudo add-apt-repository --yes ppa:openjdk-r/ppa
   #- sudo apt-get update --yes
   #- sudo apt-get install --yes openjdk-8-jre 
-  - sudo apt-get install oracle-java8-set-default
+
+  # debugging:
   - echo $JAVA_HOME
-  #- export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+  
   - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   - export JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
+  # alternative: export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+  
+  # debugging:
   - echo $JAVA_HOME
+  
   - wget --no-verbose --output-document=boost-trunk.tar.bz2 http://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.bz2/download
   - export BOOST_ROOT="$TRAVIS_BUILD_DIR/../boost-trunk"
   - export CMAKE_MODULE_PATH="$BOOST_ROOT"
@@ -57,16 +63,7 @@ install:
   - (cd $BOOST_ROOT; ./bootstrap.sh --with-libraries=system,program_options)
   - (cd $BOOST_ROOT; ./b2 --prefix=$BOOST_ROOT -d0 install)
   - cd ..
-
-  # Enable remote SSH
-  # Forward ssh to a non privileged port (to avoid sharing of non privileged ports)
-  - netcat -L localhost:22 -p 2222 &
-  - sleep 5
-  # Check for open ports
-  - netstat -an|grep -i listen
-  # Create reverse SSH tunnel
-  - ssh -fn -v -N -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ssh/travisci -R 2222:localhost:2222 farago@@i11pc54.ira.uka.de
-
+  
 script:
   - cd crab
   - mkdir -p build
