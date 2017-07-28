@@ -4,8 +4,7 @@ cache: apt
 addons:
   sonarcloud:
     organization: "davidfarago-github"
-    token:
-      secure: "32280fe5a7750e97e80b15b5ef4406c6a4ee035c"
+    token: "32280fe5a7750e97e80b15b5ef4406c6a4ee035c"
 cache:
   directories:
     - '$HOME/.sonar/cache'
